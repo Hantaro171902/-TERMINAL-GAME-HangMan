@@ -1,11 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include "ultils.h"
-#include <ctime>
-#include <iomanip>
-#include <chrono>
-#include <vector>
-
-using namespace std;
-
+void menu();
+void print_menu();
+void print_load();
