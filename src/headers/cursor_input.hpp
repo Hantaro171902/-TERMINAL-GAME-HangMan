@@ -16,10 +16,9 @@ enum class InputKey {
     RIGHT,
     ENTER,
     ESC,
-    Q, // Quit to menu
+    // Q, // Quit to menu
     R,  // Restart game
-    LEFT_BRACKET, // '[' key
-    RIGHT_BRACKET // ']' key
+    Z // Undo
 };
 
 // Play sound effects
