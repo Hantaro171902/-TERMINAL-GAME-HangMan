@@ -1,6 +1,7 @@
 #include "menu.hpp"
 #include "ultils.hpp"
 #include "cursor_input.hpp"
+#include "words.hpp"
 #include "game_logic.hpp"
 #include <iostream>
 
@@ -41,7 +42,7 @@ void menu() {
 		}
 
 		// Start game once both selected
-		if (difficulty != -1 && static_cast<WordTheme>(theme) != -1) {
+		if (difficulty != -1 && theme != -1) {
 			print_load();
 			sleep_ms(300);
 

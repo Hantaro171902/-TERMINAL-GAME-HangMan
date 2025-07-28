@@ -47,11 +47,11 @@ string get_random_word(int min_len, int max_len, WordTheme theme) {
     vector<string>* word_list = nullptr;
 
     switch (theme) {
-        case t_animals:   word_list = &words_animals; break;
-        case t_countries: word_list = &words_countries; break;
-        case t_fruits:    word_list = &words_fruits; break;
-        case t_periodic:  word_list = &words_periodic; break;
-        case t_states:    word_list = &words_states; break;
+        case WordTheme::t_animals:   word_list = &words_animals; break;
+        case WordTheme::t_countries: word_list = &words_countries; break;
+        case WordTheme::t_fruits:    word_list = &words_fruits; break;
+        case WordTheme::t_periodic:  word_list = &words_periodic; break;
+        case WordTheme::t_states:    word_list = &words_states; break;
         default: return "error";
     }
 

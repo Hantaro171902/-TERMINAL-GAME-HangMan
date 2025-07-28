@@ -31,7 +31,7 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 
 	// Load data
 	load_word_data();
-	
+		
 	word = get_random_word(min_letters, max_letters, theme);
 	if (word.empty()) {
         cout << "No words available for this theme and length. Returning to menu." << endl;
@@ -39,7 +39,7 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
         return;
     }
 	guess = string(word.length(), '_');
-	pick_given_letters(given);
+	// pick_given_letters(given);
 
 	// load_word_data(min_letters,max_letters,theme);
 	// pick_given_letters(given);
@@ -63,7 +63,10 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 
 // void load_word_data(){
 // 	//Get size of the word array
+// 	int theme = 0;
+// 	WordTheme selected_theme = static_cast<WordTheme>(theme);
 // 	int size = 0;
+
 // 	if (theme == t_animals){
 // 		size = count_animals;
 // 	}else if (theme == t_countries){
@@ -132,19 +135,19 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 // 	}
 // }
 
-void pick_given_letters(int given){
-	//Loop given amount of times
-	int picked = 0;
-	srand(time(NULL));
-	while (picked != given) {
-		sleep_ms(10);
-		int index = rand() % guess.length();
-		if (guess[index] == '_') {
-			guess_char(word[index]);
-			picked++;
-		}
-	}
-}
+// void pick_given_letters(int given){
+// 	//Loop given amount of times
+// 	int picked = 0;
+// 	srand(time(NULL));
+// 	while (picked != given) {
+// 		sleep_ms(10);
+// 		int index = rand() % guess.length();
+// 		if (guess[index] == '_') {
+// 			guess_char(word[index]);
+// 			picked++;
+// 		}
+// 	}
+// }
 
 void print_level(){
 	clearScreen();
@@ -310,12 +313,13 @@ void print_level(){
 		}
 	}else if (status == s_won){
 		cout << endl << endl << "-------------------------Whoop you won the game!!-------------------------------"<<endl;
-	}else if (status = s_lost){
+	}else if (status == s_lost){
 		cout << endl << endl << "-------------------------Dammit you lost this one-------------------------------"<<endl;
 	}else{
 		cout << endl << endl << "--------------------------------------------------------------------------------"<<endl;
 	}
 }
+
 void refresh_status(){
 	if (guesses_correct() == word.length()){
 		status = s_won;
@@ -325,6 +329,7 @@ void refresh_status(){
 		status = s_playing;
 	}
 }
+
 void refresh_turn(){
 	turn = t_waiting;
 
@@ -345,6 +350,8 @@ void refresh_turn(){
 }
 
 void guess_char(char key){
+	bool found = false;
+
 	for (char c : guess) {
 		if (tolower(key) == c){
 			turn = t_duplicate;
@@ -352,14 +359,6 @@ void guess_char(char key){
 		}
 	}
 
-	for (char c : guess){
-		if (tolower(key) == c){
-			turn = t_duplicate;
-			return;
-		}
-	}
-
-	bool found = false;
 	for (int i = 0; i < word.length(); i++){
 		//Compare guess char with the key pressed
 		if (tolower(word[i]) == tolower(key)){
@@ -369,9 +368,11 @@ void guess_char(char key){
 			found = true;
 		}
 	}
-	if (!found){
-		for (int i = 0; i < word.length(); i++){
-			if (incorrect[i] == '_'){
+
+
+	if (!found) {
+		for (int i = 0; i < incorrect.length(); i++) {
+			if (incorrect[i] == '_') {
 				incorrect[i] = tolower(key);
 				turn = t_incorrect;
 				return;
@@ -381,13 +382,13 @@ void guess_char(char key){
 }
 
 int guesses_incorrect(){
-	int guesses = 0;
-	for (char c : incorrect) {
-		if (c != '_'){
-			guesses++;
-		}
-	}
-	return guesses;
+    int guesses = 0;
+    for (char c : incorrect) {
+        if (isalpha(c)) {
+            guesses++;
+        }
+    }
+    return guesses;
 }
 
 int guesses_correct(){
