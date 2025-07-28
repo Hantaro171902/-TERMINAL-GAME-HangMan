@@ -8,6 +8,8 @@
 #include <unistd.h>
 #endif
 
+using namespace std;
+
 InputKey getInputKey() {
 #ifdef _WIN32
     int ch = _getch();
@@ -45,7 +47,7 @@ void playSound(SoundEffect effect) {
         case DEFEAT:  Beep(400, 300); break;
     }
 #else
-    std::cout << "\a"; // fallback sound
+    cout << "\a"; // fallback sound
 #endif
 }
 
@@ -58,9 +60,9 @@ void toggle_cursor(bool showFlag) {
     SetConsoleCursorInfo(out, &cursorInfo);
 #else
     if (showFlag)
-        std::cout << "\033[?25h";
+        cout << "\033[?25h";
     else
-        std::cout << "\033[?25l";
+        cout << "\033[?25l";
 #endif
 }
 

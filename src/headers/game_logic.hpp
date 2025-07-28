@@ -1,7 +1,10 @@
-#pragma once;
+#pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
+#include "words.hpp"
 
 enum GameState { s_playing = 0, s_won, s_lost, s_ended };
 enum GuessResult { t_waiting = 0, t_correct, t_incorrect, t_duplicate };
