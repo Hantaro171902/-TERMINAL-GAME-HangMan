@@ -2,6 +2,7 @@
 #include "ultils.hpp"
 #include "cursor_input.hpp"
 #include "game_logic.hpp"
+#include <iostream>
 
 static int stage = 0;
 static int selected = 0;
