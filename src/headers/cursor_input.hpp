@@ -18,7 +18,7 @@ enum class InputKey {
     RIGHT,
     ENTER,
     ESC,
-    // Q, // Quit to menu
+    Q, // Quit to menu
     R,  // Restart game
     Z // Undo
 };

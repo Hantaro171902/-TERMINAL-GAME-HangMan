@@ -1,5 +1,5 @@
-#include "cursor_input.h"
-#include "ultils.h"
+#include "cursor_input.hpp"
+#include "ultils.hpp"
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>     // for read()
@@ -25,6 +25,20 @@ void toggle_cursor(bool showFlag){
         std::cout << "\033[?25l"; // hide cursor
 }
 #endif
+
+char get_input_char() {
+    char buf = 0;
+    struct termios old = {};
+    if (tcgetattr(STDIN_FILENO, &old) < 0) perror("tcgetattr()");
+    struct termios new_one = old;
+    new_one.c_lflag &= ~ICANON;
+    new_one.c_lflag &= ~ECHO;
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &new_one) < 0) perror("tcsetattr ICANON");
+    if (read(STDIN_FILENO, &buf, 1) < 0) perror("read()");
+    if (tcsetattr(STDIN_FILENO, TCSADRAIN, &old) < 0) perror("tcsetattr ~ICANON");
+    return buf;
+}
+
 
 
 InputKey getInputKey() {

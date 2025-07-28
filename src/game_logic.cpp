@@ -29,7 +29,15 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 	min_letters = min_letters_;
 	max_letters = max_letters_;
 
+	// Load data
+	load_word_data();
+	
 	word = get_random_word(min_letters, max_letters, theme);
+	if (word.empty()) {
+        cout << "No words available for this theme and length. Returning to menu." << endl;
+        status = s_ended;
+        return;
+    }
 	guess = string(word.length(), '_');
 	pick_given_letters(given);
 

@@ -8,11 +8,11 @@
 
 using namespace std;
 
-const int count_animals = 214;
-const int count_countries = 174;
-const int count_fruits = 73;
-const int count_periodic = 118;
-const int count_states = 39;
+// const int count_animals = 214;
+// const int count_countries = 174;
+// const int count_fruits = 73;
+// const int count_periodic = 118;
+// const int count_states = 39;
 
 // Word lists for each theme
 vector<string> words_animals;
@@ -52,6 +52,7 @@ string get_random_word(int min_len, int max_len, WordTheme theme) {
         case t_fruits:    word_list = &words_fruits; break;
         case t_periodic:  word_list = &words_periodic; break;
         case t_states:    word_list = &words_states; break;
+        default: return "error";
     }
 
     if (!word_list || word_list->empty()) return "";
@@ -62,11 +63,9 @@ string get_random_word(int min_len, int max_len, WordTheme theme) {
             filtered.push_back(word);
     }
 
-    if (filtered.empty()) return "";
+    if (filtered.empty()) return "error";
 
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_int_distribution<> dist(0, filtered.size() - 1);
-
-    return filtered[dist(gen)];
+    srand(time(NULL));
+    int index = rand() % filtered.size();
+    return filtered[index];
 }

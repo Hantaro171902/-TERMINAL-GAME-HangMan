@@ -28,5 +28,7 @@ set(HEADERS
 # Executable target
 add_executable(Hangman ${SOURCES} ${HEADERS})
 
+target_include_directories(Hangman PRIVATE src/headers)
+
 # Optional: copy asset folder into build dir
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
