@@ -8,22 +8,33 @@
 
 using namespace std;
 
-char *word;
-char *guess;
-char incorrect[7] = {'_'};
+string word;
+string guess;
+string incorrect = "______";
 
 int status;
 int turn;
+WordTheme theme;
+int min_letters;
+int max_letters;
 
-void start_game(int min_letters, int max_letters, int given, int theme){
+void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_){
 	//Reset incorrect guesses
-	strcpy(incorrect,"______");
+	incorrect = "______";
 
 	//Setup Game 
 	status = s_playing;
-	load_word_data(min_letters,max_letters,theme);
-	pick_given_letters(given);
+	theme = theme_;
 	turn = t_waiting;
+	min_letters = min_letters_;
+	max_letters = max_letters_;
+
+	word = get_random_word(min_letters, max_letters, theme);
+	guess = string(word.length(), '_');
+	pick_given_letters(given);
+
+	// load_word_data(min_letters,max_letters,theme);
+	// pick_given_letters(given);
 
 	//Game Loop
 	while(status == s_playing){
@@ -34,105 +45,95 @@ void start_game(int min_letters, int max_letters, int given, int theme){
 	
 	//Print end screens
 	print_level();
-	_getch();
+	getch();
 	status = s_ended;
 
-	//Release memory - This causes crashing for some reason
-	delete word;
-	delete guess;
+	// //Release memory - This causes crashing for some reason
+	// delete word;
+	// delete guess;
 }
 
-void load_word_data(int min_letters, int max_letters, int theme){
-	//Get size of the word array
-	int size = 0;
-	if (theme == t_animals){
-		size = count_animals;
-	}else if (theme == t_countries){
-		size = count_countries;
-	}else if (theme == t_fruits){
-		size = count_fruits;
-	}else if (theme == t_periodic){
-		size = count_periodic;
-	}else if (theme == t_states){
-		size = count_states;
-	}
+// void load_word_data(){
+// 	//Get size of the word array
+// 	int size = 0;
+// 	if (theme == t_animals){
+// 		size = count_animals;
+// 	}else if (theme == t_countries){
+// 		size = count_countries;
+// 	}else if (theme == t_fruits){
+// 		size = count_fruits;
+// 	}else if (theme == t_periodic){
+// 		size = count_periodic;
+// 	}else if (theme == t_states){
+// 		size = count_states;
+// 	}
 
-	//Get the word associated with the random index and copy it into word and guess vars
-	SYSTEMTIME time;
-	int random_index;
-	bool found = false;
-	while (!found){
+// 	//Get the word associated with the random index and copy it into word and guess vars
+// 	SYSTEMTIME time;
+// 	int random_index;
+// 	bool found = false;
+// 	while (!found){
 
-		//Get random index for words
-		GetSystemTime(&time);
-		srand((unsigned)time.wMilliseconds);
-		random_index = rand() % size;
+// 		//Get random index for words
+// 		GetSystemTime(&time);
+// 		srand((unsigned)time.wMilliseconds);
+// 		random_index = rand() % size;
 
-		int length = 0;
-		if (theme == t_animals){
-			length = strlen(words_animals[random_index]);
-		}else if (theme == t_countries){
-			length = strlen(words_countries[random_index]);
-		}else if (theme == t_fruits){
-			length = strlen(words_fruits[random_index]);
-		}else if (theme == t_periodic){
-			length = strlen(words_periodic[random_index]);
-		}else if (theme == t_states){
-			length = strlen(words_states[random_index]);
-		}
+// 		int length = 0;
+// 		if (theme == t_animals){
+// 			length = strlen(words_animals[random_index]);
+// 		}else if (theme == t_countries){
+// 			length = strlen(words_countries[random_index]);
+// 		}else if (theme == t_fruits){
+// 			length = strlen(words_fruits[random_index]);
+// 		}else if (theme == t_periodic){
+// 			length = strlen(words_periodic[random_index]);
+// 		}else if (theme == t_states){
+// 			length = strlen(words_states[random_index]);
+// 		}
 
-		//Check if length
-		if (length >= min_letters && length <= max_letters){
-			found = true;
-		}
-	}
+// 		//Check if length
+// 		if (length >= min_letters && length <= max_letters){
+// 			found = true;
+// 		}
+// 	}
 
-	//Get word
-	if (theme == t_animals){
-		word = new char[1+strlen(words_animals[random_index])];
-		strcpy(word,words_animals[random_index]);
-	}else if (theme == t_countries){
-		word = new char[1+strlen(words_countries[random_index])];
-		strcpy(word,words_countries[random_index]);
-	}else if (theme == t_fruits){
-		word = new char[1+strlen(words_fruits[random_index])];
-		strcpy(word,words_fruits[random_index]);
-	}else if (theme == t_periodic){
-		word = new char[1+strlen(words_periodic[random_index])];
-		strcpy(word,words_periodic[random_index]);
-	}else if (theme == t_states){
-		word = new char[1+strlen(words_states[random_index])];
-		strcpy(word,words_states[random_index]);
-	}
+// 	//Get word
+// 	if (theme == t_animals){
+// 		word = new char[1+strlen(words_animals[random_index])];
+// 		strcpy(word,words_animals[random_index]);
+// 	}else if (theme == t_countries){
+// 		word = new char[1+strlen(words_countries[random_index])];
+// 		strcpy(word,words_countries[random_index]);
+// 	}else if (theme == t_fruits){
+// 		word = new char[1+strlen(words_fruits[random_index])];
+// 		strcpy(word,words_fruits[random_index]);
+// 	}else if (theme == t_periodic){
+// 		word = new char[1+strlen(words_periodic[random_index])];
+// 		strcpy(word,words_periodic[random_index]);
+// 	}else if (theme == t_states){
+// 		word = new char[1+strlen(words_states[random_index])];
+// 		strcpy(word,words_states[random_index]);
+// 	}
 
-	//Fill in guess with spaces
-	guess = new char[1+strlen(word)];
-	strcpy(guess,word);
-	for (int i=0; i<strlen(guess); i++){
-		guess[i] = '_';
-	}
-}
+// 	//Fill in guess with spaces
+// 	guess = new char[1+strlen(word)];
+// 	strcpy(guess,word);
+// 	for (int i=0; i<strlen(guess); i++){
+// 		guess[i] = '_';
+// 	}
+// }
+
 void pick_given_letters(int given){
 	//Loop given amount of times
-	SYSTEMTIME time;
-	int random_index;
 	int picked = 0;
-	while (picked != given){
-
-		//Pick random index of string
-		Sleep(10);
-		GetSystemTime(&time);
-		srand((unsigned)time.wMilliseconds);
-		random_index = rand() % strlen(guess);
-
-		//Check if letter has been given already
-		if (guess[random_index] == '_'){
-			
-			//Fill in the letter in the guess string
-			guess_char(word[random_index]);
-
-			//guess[random_index] = word[random_index];
-			picked += 1;
+	srand(time(NULL));
+	while (picked != given) {
+		sleep_ms(10);
+		int index = rand() % guess.length();
+		if (guess[index] == '_') {
+			guess_char(word[index]);
+			picked++;
 		}
 	}
 }
@@ -165,18 +166,23 @@ void print_level(){
 	if (status == s_lost){
 
 		//Print currently guessed
-		cout << "  ";
-		for (int i=0; i<strlen(word); i++){
-			cout << word[i];
-		}
-		cout << endl << endl;
-	}else{
+		// cout << "  ";
+		// for (int i=0; i<strlen(word); i++){
+		// 	cout << word[i];
+		// }
+		// cout << endl << endl;
+		cout << " " << word << endl << endl;
+	} else {
 	
 		//Print currently guessed
 		cout << "  ";
-		for (int i=0; i<strlen(guess); i++){
-			cout << guess[i] << " ";
-		}
+		// for (int i=0; i<strlen(guess); i++){
+		// 	cout << guess[i] << " ";
+		// }
+		// cout << endl << endl;
+		cout << " ";
+		for (char c : guess)
+			cout << c << " ";
 		cout << endl << endl;
 	}
 
@@ -276,9 +282,9 @@ void print_level(){
 	
 	//Print currently guessed
 	cout << "  ";
-	for (int i=0; i<strlen(incorrect); i++){
-		if (isalpha(incorrect[i]) || incorrect[i] == '_'){
-			cout << incorrect[i] << " ";
+	for (char c : incorrect) {
+		if (isalpha(c) || c == '_'){
+			cout << c << " ";
 		}
 	}
 	cout << endl;
@@ -303,7 +309,7 @@ void print_level(){
 	}
 }
 void refresh_status(){
-	if (guesses_correct() == strlen(word)){
+	if (guesses_correct() == word.length()){
 		status = s_won;
 	}else if (guesses_incorrect() == 6){
 		status = s_lost;
@@ -315,7 +321,7 @@ void refresh_turn(){
 	turn = t_waiting;
 
 	//Get key pressed
-	char key = _getch();
+	char key = getch();
 
 	//Exit game if key is escape
 	if (key == 27){
@@ -329,23 +335,24 @@ void refresh_turn(){
 
 	guess_char(key);
 }
+
 void guess_char(char key){
-	for (int i=0; i<strlen(guess); i++){
-		if (tolower(key) == guess[i]){
+	for (char c : guess) {
+		if (tolower(key) == c){
 			turn = t_duplicate;
 			return;
 		}
 	}
 
-	for (int i=0; i<strlen(incorrect); i++){
-		if (tolower(key) == incorrect[i]){
+	for (char c : guess){
+		if (tolower(key) == c){
 			turn = t_duplicate;
 			return;
 		}
 	}
 
 	bool found = false;
-	for (int i=0; i<strlen(word); i++){
+	for (int i = 0; i < word.length(); i++){
 		//Compare guess char with the key pressed
 		if (tolower(word[i]) == tolower(key)){
 			//Replace guess letter with actual letter if guessed correct
@@ -355,31 +362,30 @@ void guess_char(char key){
 		}
 	}
 	if (!found){
-		
-
-	for (int i=0; i<strlen(incorrect); i++){
-		if (incorrect[i] == '_'){
-			incorrect[i] = tolower(key);
-			turn = t_incorrect;
-			return;
+		for (int i = 0; i < word.length(); i++){
+			if (incorrect[i] == '_'){
+				incorrect[i] = tolower(key);
+				turn = t_incorrect;
+				return;
+			}
 		}
-	}
 	}
 }
 
 int guesses_incorrect(){
 	int guesses = 0;
-	for (int i=0; i<strlen(incorrect); i++){
-		if (incorrect[i] != '_'){
+	for (char c : incorrect) {
+		if (c != '_'){
 			guesses++;
 		}
 	}
 	return guesses;
 }
+
 int guesses_correct(){
 	int guesses = 0;
-	for (int i=0; i<strlen(guess); i++){
-		if (guess[i] != '_'){
+	for (char c : incorrect){
+		if (c != '_'){
 			guesses++;
 		}
 	}

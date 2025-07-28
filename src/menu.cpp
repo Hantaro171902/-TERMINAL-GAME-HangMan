@@ -40,14 +40,14 @@ void menu() {
 		}
 
 		// Start game once both selected
-		if (difficulty != -1 && theme != -1) {
+		if (difficulty != -1 && static_cast<WordTheme>(theme) != -1) {
 			print_load();
 			sleep_ms(300);
 
 			switch (difficulty) {
-				case 0: start_game(3, 5, 0, theme); break;
-				case 1: start_game(6, 8, 1, theme); break;
-				case 2: start_game(9, 20, 2, theme); break;
+				case 0: start_game(3, 5, 0,  static_cast<WordTheme>(theme)); break;
+				case 1: start_game(6, 8, 1,  static_cast<WordTheme>(theme)); break;
+				case 2: start_game(9, 20, 2,  static_cast<WordTheme>(theme)); break;
 			}
 
 			// Reset for next loop
