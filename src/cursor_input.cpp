@@ -30,12 +30,12 @@ void toggle_cursor(bool showFlag){
 struct terminal_state {
     struct termios oldt;
     int oldf;
-    TerminalStateRestorer() {
+    terminal_state() {
         tcgetattr(STDIN_FILENO, &oldt); 
-        oldf = fcntl(STDIN_FILENO, F_GETFL, 0); /
+        oldf = fcntl(STDIN_FILENO, F_GETFL, 0); 
     }
 
-    ~TerminalStateRestorer() {
+    ~terminal_state() {
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
         fcntl(STDIN_FILENO, F_SETFL, oldf);
     }
@@ -117,8 +117,8 @@ InputKey getInputKey() {
         usleep(1000); // Sleep for a short time to avoid busy waiting
     }
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore original settings
-    fcntl(STDIN_FILENO, F_SETFL, 0); // Restore blocking mode
+    // tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore original settings
+    // fcntl(STDIN_FILENO, F_SETFL, 0); // Restore blocking mode
     
     return key;
 }

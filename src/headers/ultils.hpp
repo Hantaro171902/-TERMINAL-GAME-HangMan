@@ -4,10 +4,7 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 void clearScreen();
-
 void clearTerminal(); // Full terminal reset
 
 void setTextColor(int color);

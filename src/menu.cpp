@@ -6,6 +6,8 @@
 #include "game_logic.hpp"
 #include <iostream>
 
+using namespace std;
+
 static int stage = 0;
 static int selected = 0;
 

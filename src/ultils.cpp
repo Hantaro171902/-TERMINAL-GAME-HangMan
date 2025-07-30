@@ -12,6 +12,8 @@
 #include <fcntl.h>
 #endif
 
+using namespace std;
+
 void clearScreen() {
 #ifdef _WIN32
     system("cls");
