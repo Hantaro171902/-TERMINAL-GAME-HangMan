@@ -1,7 +1,11 @@
+// game_logic.cpp
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cstring>
+#include <cctype>	// for tolower, isalpha
+#include <set>
+
 #include "game_logic.hpp"
 #include "ultils.hpp"
 #include "words.hpp"
@@ -11,9 +15,10 @@ using namespace std;
 string word;
 string guess;
 string incorrect = "______";
+set<char> guess_letters; 	// Store all guess letters (right && wrong)
 
-int status;
-int turn;
+GameState status;
+GuessResult turn;
 WordTheme theme;
 int min_letters;
 int max_letters;

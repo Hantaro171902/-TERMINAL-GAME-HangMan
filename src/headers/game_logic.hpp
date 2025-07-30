@@ -1,3 +1,4 @@
+// game_logic.hpp
 #pragma once
 
 #include <iostream>
@@ -6,9 +7,19 @@
 #include <cstring>
 #include "words.hpp"
 
+enum class GameState { 
+    s_playing, 
+    s_won, 
+    s_lost, 
+    s_ended 
+};
 
-enum GameState { s_playing = 0, s_won, s_lost, s_ended };
-enum GuessResult { t_waiting = 0, t_correct, t_incorrect, t_duplicate };
+enum class GuessResult {
+    t_waiting, 
+    t_correct, 
+    t_incorrect, 
+    t_duplicate 
+};
 
 void start_game(int min_letters, int max_letters, int given, WordTheme theme);
 void guess_char(char key);

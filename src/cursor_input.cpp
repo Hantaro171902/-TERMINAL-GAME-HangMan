@@ -1,3 +1,4 @@
+// cursor_input.cpp
 #include "cursor_input.hpp"
 #include "ultils.hpp"
 #include <iostream>
@@ -24,33 +25,56 @@ void toggle_cursor(bool showFlag){
     else
         std::cout << "\033[?25l"; // hide cursor
 }
+
+// Helper struct to ensure that terminal is repaired
+struct terminal_state {
+    struct termios oldt;
+    int oldf;
+    TerminalStateRestorer() {
+        tcgetattr(STDIN_FILENO, &oldt); 
+        oldf = fcntl(STDIN_FILENO, F_GETFL, 0); /
+    }
+
+    ~TerminalStateRestorer() {
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        fcntl(STDIN_FILENO, F_SETFL, oldf);
+    }
+};
+
 #endif
+
 
 char get_input_char() {
     char buf = 0;
-    struct termios old = {};
-    if (tcgetattr(STDIN_FILENO, &old) < 0) perror("tcgetattr()");
-    struct termios new_one = old;
-    new_one.c_lflag &= ~ICANON;
-    new_one.c_lflag &= ~ECHO;
+#ifndef _WIN32
+    
+    terminal_state restorer;
+    struct termios new_one = restorer.oldt; 
+    new_one.c_lflag &= ~ICANON; 
+    new_one.c_lflag &= ~ECHO;  // Turn off echo
     if (tcsetattr(STDIN_FILENO, TCSANOW, &new_one) < 0) perror("tcsetattr ICANON");
+#endif
+
     if (read(STDIN_FILENO, &buf, 1) < 0) perror("read()");
-    if (tcsetattr(STDIN_FILENO, TCSADRAIN, &old) < 0) perror("tcsetattr ~ICANON");
+
+#ifdef _WIN32
+    
+#endif
     return buf;
 }
 
-
-
 InputKey getInputKey() {
-    struct termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
+#ifndef _WIN32
+    
+    terminal_state restorer;
+    struct termios newt = restorer.oldt; 
 
-    newt.c_lflag &= ~(ICANON | ECHO); // Disable canonical mode
+    newt.c_lflag &= ~(ICANON | ECHO); // Disable canonical mode and echo
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
     // Set read() to non-blocking mode
     fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
+#endif
 
     InputKey key = InputKey::NONE;
     char ch;
@@ -79,7 +103,7 @@ InputKey getInputKey() {
                     case 27:   return InputKey::ESC; // Escape
                     case 'q': case 'Q': return InputKey::Q; // Quit to menu
                     case 'r': case 'R': return InputKey::R; // Restart game
-                    case 'z': case 'Z': return InputKey::R; // Undo
+                    case 'z': case 'Z': return InputKey::Z; // Undo
                     
                     default:   return InputKey::NONE;
                 }
