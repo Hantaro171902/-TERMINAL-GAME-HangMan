@@ -66,93 +66,93 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 	// delete guess;
 }
 
-void load_word_data(){
-	//Get size of the word array
-	int theme = 0;
-	WordTheme selected_theme = static_cast<WordTheme>(theme);
-	int size = 0;
+// void load_word_data(){
+// 	//Get size of the word array
+// 	int theme = 0;
+// 	WordTheme selected_theme = static_cast<WordTheme>(theme);
+// 	int size = 0;
 
-	if (theme == t_animals){
-		size = count_animals;
-	}else if (theme == t_countries){
-		size = count_countries;
-	}else if (theme == t_fruits){
-		size = count_fruits;
-	}else if (theme == t_periodic){
-		size = count_periodic;
-	}else if (theme == t_states){
-		size = count_states;
-	}
+// 	if (theme == t_animals){
+// 		size = count_animals;
+// 	}else if (theme == t_countries){
+// 		size = count_countries;
+// 	}else if (theme == t_fruits){
+// 		size = count_fruits;
+// 	}else if (theme == t_periodic){
+// 		size = count_periodic;
+// 	}else if (theme == t_states){
+// 		size = count_states;
+// 	}
 
-	//Get the word associated with the random index and copy it into word and guess vars
-	SYSTEMTIME time;
-	int random_index;
-	bool found = false;
-	while (!found){
+// 	//Get the word associated with the random index and copy it into word and guess vars
+// 	SYSTEMTIME time;
+// 	int random_index;
+// 	bool found = false;
+// 	while (!found){
 
-		//Get random index for words
-		GetSystemTime(&time);
-		srand((unsigned)time.wMilliseconds);
-		random_index = rand() % size;
+// 		//Get random index for words
+// 		GetSystemTime(&time);
+// 		srand((unsigned)time.wMilliseconds);
+// 		random_index = rand() % size;
 
-		int length = 0;
-		if (theme == t_animals){
-			length = strlen(words_animals[random_index]);
-		}else if (theme == t_countries){
-			length = strlen(words_countries[random_index]);
-		}else if (theme == t_fruits){
-			length = strlen(words_fruits[random_index]);
-		}else if (theme == t_periodic){
-			length = strlen(words_periodic[random_index]);
-		}else if (theme == t_states){
-			length = strlen(words_states[random_index]);
-		}
+// 		int length = 0;
+// 		if (theme == t_animals){
+// 			length = strlen(words_animals[random_index]);
+// 		}else if (theme == t_countries){
+// 			length = strlen(words_countries[random_index]);
+// 		}else if (theme == t_fruits){
+// 			length = strlen(words_fruits[random_index]);
+// 		}else if (theme == t_periodic){
+// 			length = strlen(words_periodic[random_index]);
+// 		}else if (theme == t_states){
+// 			length = strlen(words_states[random_index]);
+// 		}
 
-		//Check if length
-		if (length >= min_letters && length <= max_letters){
-			found = true;
-		}
-	}
+// 		//Check if length
+// 		if (length >= min_letters && length <= max_letters){
+// 			found = true;
+// 		}
+// 	}
 
-	//Get word
-	if (theme == t_animals){
-		word = new char[1+strlen(words_animals[random_index])];
-		strcpy(word,words_animals[random_index]);
-	}else if (theme == t_countries){
-		word = new char[1+strlen(words_countries[random_index])];
-		strcpy(word,words_countries[random_index]);
-	}else if (theme == t_fruits){
-		word = new char[1+strlen(words_fruits[random_index])];
-		strcpy(word,words_fruits[random_index]);
-	}else if (theme == t_periodic){
-		word = new char[1+strlen(words_periodic[random_index])];
-		strcpy(word,words_periodic[random_index]);
-	}else if (theme == t_states){
-		word = new char[1+strlen(words_states[random_index])];
-		strcpy(word,words_states[random_index]);
-	}
+// 	//Get word
+// 	if (theme == t_animals){
+// 		word = new char[1+strlen(words_animals[random_index])];
+// 		strcpy(word,words_animals[random_index]);
+// 	}else if (theme == t_countries){
+// 		word = new char[1+strlen(words_countries[random_index])];
+// 		strcpy(word,words_countries[random_index]);
+// 	}else if (theme == t_fruits){
+// 		word = new char[1+strlen(words_fruits[random_index])];
+// 		strcpy(word,words_fruits[random_index]);
+// 	}else if (theme == t_periodic){
+// 		word = new char[1+strlen(words_periodic[random_index])];
+// 		strcpy(word,words_periodic[random_index]);
+// 	}else if (theme == t_states){
+// 		word = new char[1+strlen(words_states[random_index])];
+// 		strcpy(word,words_states[random_index]);
+// 	}
 
-	//Fill in guess with spaces
-	guess = new char[1+strlen(word)];
-	strcpy(guess,word);
-	for (int i=0; i<strlen(guess); i++){
-		guess[i] = '_';
-	}
-}
+// 	//Fill in guess with spaces
+// 	guess = new char[1+strlen(word)];
+// 	strcpy(guess,word);
+// 	for (int i=0; i<strlen(guess); i++){
+// 		guess[i] = '_';
+// 	}
+// }
 
-void pick_given_letters(int given){
-	//Loop given amount of times
-	int picked = 0;
-	srand(time(NULL));
-	while (picked != given) {
-		sleep_ms(10);
-		int index = rand() % guess.length();
-		if (guess[index] == '_') {
-			guess_char(word[index]);
-			picked++;
-		}
-	}
-}
+// void pick_given_letters(int given){
+// 	//Loop given amount of times
+// 	int picked = 0;
+// 	srand(time(NULL));
+// 	while (picked != given) {
+// 		sleep_ms(10);
+// 		int index = rand() % guess.length();
+// 		if (guess[index] == '_') {
+// 			guess_char(word[index]);
+// 			picked++;
+// 		}
+// 	}
+// }
 
 void print_level(){
 	clearScreen();
@@ -173,7 +173,7 @@ void print_level(){
 		cout << endl << "--------------------Please guess by pressing any letter-------------------------"<<endl<<endl;
 	}else if (status == GameState::s_won){
 		cout << endl << "------------------Please press any key to return to menu------------------------"<<endl<<endl;
-	}else if (status == GameState::s_lost){
+	}else if (status = GameState::s_lost){
 		cout << endl << "------------------Please press any key to return to menu------------------------"<<endl<<endl;
 	}else{
 		cout << endl  << "--------------------------------------------------------------------------------"<<endl<<endl;
