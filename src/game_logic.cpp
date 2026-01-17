@@ -9,6 +9,8 @@
 #include "game_logic.hpp"
 #include "ultils.hpp"
 #include "words.hpp"
+#include "headers/color.hpp"
+#include "headers/cursor_input.hpp"
 
 using namespace std;
 
@@ -65,6 +67,44 @@ void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_)
 	// //Release memory - This causes crashing for some reason
 	// delete word;
 	// delete guess;
+}
+
+void last_chance(){
+	clearScreen();
+	cout << "-----------------------------Press Escape to quit-------------------------------"<<endl;
+	cout << "        _   _                  ___  ___            " << endl;
+	cout << "       | | | |                 |  \\/  |            " << endl;
+	cout << "       | |_| | __ _ _ __   __ _| .  . | __ _ _ __  " << endl;
+	cout << "       |  _  |/ _` | '_ \\ / _` | |\\/| |/ _` | '_ \\ " << endl;
+	cout << "       | | | | (_| | | | | (_| | |  | | (_| | | | |" << endl;
+	cout << "       \\_| |_/\\__,_|_| |_|\\__, \\_|  |_/\\__,_|_| |_|" << endl;
+	cout << "                           __/ |                   " << endl;
+	cout << "                          |___/                    " << endl;
+	cout << endl << "------------------This is your last chance! Guess the word--------------------"<<endl<<endl;
+	cout << "┌";
+	for(int i = 0; i < word.length() + 2; i++){
+		cout << "─";
+	}
+	cout << "┐" << endl;
+	cout << "│ ";
+	for(int i = 0; i < word.length(); i++){
+		cout << " ";
+	}
+	cout << " │" << endl;
+	cout << "└";
+	for(int i = 0; i < word.length() + 2; i++){
+		cout << "─";
+	}
+	cout << "┘" << endl;
+	move_cursor((word.length() + 4) / 2, 1);
+	string user_guess;
+	cin >> user_guess;
+
+	if(user_guess == word){
+		status = GameState::s_won;
+	} else {
+		status = GameState::s_lost;
+	}
 }
 
 // void load_word_data(){
@@ -205,6 +245,7 @@ void print_level(){
 
 	//Print hangman according to state
 	int guesses = guesses_incorrect();
+	setTextColor(RED);
 	switch (guesses){
 		case 0:
 			cout << "  +----+"		<<endl;
@@ -284,6 +325,7 @@ void print_level(){
 			cout << "  +=========" 	<<endl;
 		break;
 	}
+	resetTextColor();
 	
 	//Show user number of guesses left
 	cout << endl << "  ";
@@ -299,28 +341,40 @@ void print_level(){
 	
 	//Print currently guessed
 	cout << "  ";
+	setTextColor(RED);
 	for (char c : incorrect) {
 		if (isalpha(c) || c == '_'){
 			cout << c << " ";
 		}
 	}
+	resetTextColor();
 	cout << endl;
 	
 	//Footer
 	if (status == GameState::s_playing){
 		if (turn == GuessResult::t_correct){
+			setTextColor(GREEN);
 			cout << endl << endl << "------------------------Guess was correct, well done----------------------------"<<endl;
+			resetTextColor();
 		}else if (turn == GuessResult::t_incorrect){
+			setTextColor(RED);
 			cout << endl << endl << "----------------------------Guess was incorrect---------------------------------"<<endl;
+			resetTextColor();
 		}else if (turn == GuessResult::t_duplicate){
+			setTextColor(YELLOW);
 			cout << endl << endl << "----------------------This letter has alreay been guessed-----------------------"<<endl;
+			resetTextColor();
 		}else{
 			cout << endl << endl << "--------------------------------------------------------------------------------"<<endl;
 		}
 	}else if (status == GameState::s_won){
+		setTextColor(GREEN);
 		cout << endl << endl << "-------------------------Whoop you won the game!!-------------------------------"<<endl;
+		resetTextColor();
 	}else if (status == GameState::s_lost){
+		setTextColor(RED);
 		cout << endl << endl << "-------------------------Dammit you lost this one-------------------------------"<<endl;
+		resetTextColor();
 	}else{
 		cout << endl << endl << "--------------------------------------------------------------------------------"<<endl;
 	}
@@ -330,7 +384,7 @@ void refresh_status(){
 	if (guesses_correct() == word.length()){
 		status = GameState::s_won;
 	}else if (guesses_incorrect() == 6){
-		status = GameState::s_lost;
+		last_chance();
 	}else{
 		status = GameState::s_playing;
 	}

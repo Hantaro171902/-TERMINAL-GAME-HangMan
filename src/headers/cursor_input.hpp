@@ -33,6 +33,7 @@ enum SoundEffect {
 
 void playSound(SoundEffect effect);
 void toggle_cursor(bool showFlag);
+void move_cursor(int x, int y);
 char get_input_char();
 
 InputKey getInputKey();

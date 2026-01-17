@@ -26,6 +26,10 @@ void toggle_cursor(bool showFlag){
         std::cout << "\033[?25l"; // hide cursor
 }
 
+void move_cursor(int x, int y){
+    cout << "\033[" << y << ";" << x << "H";
+}
+
 // Helper struct to ensure that terminal is repaired
 struct terminal_state {
     struct termios oldt;

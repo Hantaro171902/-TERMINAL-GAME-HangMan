@@ -15,6 +15,7 @@ set(SOURCES
     src/menu.cpp
     src/words.cpp
     src/ultils.cpp
+    src/color.cpp
 )
 
 set(HEADERS
