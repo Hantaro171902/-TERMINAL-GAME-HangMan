@@ -26,6 +26,7 @@ int max_letters;
 void start_game(int min_letters_, int max_letters_, int given, WordTheme theme_){
 	//Reset incorrect guesses
 	incorrect = "______";
+	guess_letters.clear();
 
 	//Setup Game 
 	status = GameState::s_playing;
@@ -173,7 +174,7 @@ void print_level(){
 		cout << endl << "--------------------Please guess by pressing any letter-------------------------"<<endl<<endl;
 	}else if (status == GameState::s_won){
 		cout << endl << "------------------Please press any key to return to menu------------------------"<<endl<<endl;
-	}else if (status = GameState::s_lost){
+	}else if (status == GameState::s_lost){
 		cout << endl << "------------------Please press any key to return to menu------------------------"<<endl<<endl;
 	}else{
 		cout << endl  << "--------------------------------------------------------------------------------"<<endl<<endl;
@@ -339,7 +340,9 @@ void refresh_turn(){
 	turn = GuessResult::t_waiting;
 
 	//Get key pressed
-	char key = getch();
+	// char key = getch();
+	char key;
+	cin >> key;
 
 	//Exit game if key is escape
 	if (key == 27){
@@ -355,14 +358,14 @@ void refresh_turn(){
 }
 
 void guess_char(char key){
-	bool found = false;
+	key = tolower(key);
+	if (guess_letters.count(key)) {
+		turn = GuessResult::t_duplicate;
+		return;
+	}
+	guess_letters.insert(key);
 
-	// for (char c : guess) {
-	// 	if (tolower(key) == c){
-	// 		turn = GameState::t_duplicate;
-	// 		return;
-	// 	}
-	// }
+	bool found = false;
 
 	for (int i = 0; i < word.length(); i++){
 		//Compare guess char with the key pressed
